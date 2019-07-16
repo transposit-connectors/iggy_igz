@@ -7,7 +7,7 @@
     body: {
       payload: {
         slack: {
-          text: "Hello, from Transposit!"
+          text: `\`\`\`${JSON.stringify(http_event)}\`\`\``
         }
       }
     }
