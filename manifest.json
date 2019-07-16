@@ -12,6 +12,10 @@
             "type": "OBJECT"
           }],
           "js": "fulfillment.js"
+        },
+        "access": {
+          "requireApiKey": true,
+          "webhook": true
         }
       }],
       "javascriptAPIVersion": "3",
