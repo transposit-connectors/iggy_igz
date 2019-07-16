@@ -1,5 +1,5 @@
 ({ http_event }) => {
-  console.log(http_event);
+  const parsed_body = JSON.parse(http_event.body);
 
   return {
     status_code: 200,
@@ -7,7 +7,7 @@
     body: {
       payload: {
         slack: {
-          text: `\`\`\`${JSON.stringify(http_event)}\`\`\``
+          text: `\`\`\`${JSON.stringify(parsed_body, null, 2)}\`\`\``
         }
       }
     }
