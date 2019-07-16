@@ -2,13 +2,16 @@
   "v2": {
     "transposit": {
       "operations": [{
-        "id": "hello_world",
-        "description": "Returns \"Hello, world\" in different languages",
+        "id": "fulfillment",
         "function": {
-          "js": "hello_world.js"
-        },
-        "access": {
-          "requireUser": true
+          "parameters": [{
+            "name": "http_event",
+            "default": {
+              "text": "{\"http_method\": \"GET\", \"query_parameters\": {}, \"headers\": {}, \"body\": \"\"}"
+            },
+            "type": "OBJECT"
+          }],
+          "js": "fulfillment.js"
         }
       }],
       "javascriptAPIVersion": "3",
