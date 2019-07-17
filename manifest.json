@@ -21,6 +21,28 @@
           "requireApiKey": true,
           "webhook": true
         }
+      }, {
+        "id": "list_log_groups",
+        "tql": {
+          "tql": "SELECT * FROM aws_cloudwatch_logs.list_log_groups\n  WHERE logGroupName = \"/aws/ecs/stage/web\"\n\n/*\n * For sample code and reference material, visit\n * https://www.transposit.com/docs/get-started/sql-quickstart\n */"
+        }
+      }, {
+        "id": "list_log_streams",
+        "tql": {
+          "tql": "SELECT logStreamName FROM aws_cloudwatch_logs.list_log_streams\n  WHERE logGroupName=\"/aws/ecs/stage/web\"\n  AND orderBy=\"LastEventTime\"\n  AND descending=TRUE\n  LIMIT 1"
+        }
+      }, {
+        "id": "filter_log_events",
+        "tql": {
+          "parameters": [{
+            "name": "requestId",
+            "type": "STRING"
+          }, {
+            "name": "instance",
+            "type": "STRING"
+          }],
+          "tql": "SELECT * FROM aws_cloudwatch_logs.filter_log_events\n  WHERE logGroupName=\"/aws/ecs/\" + @instance + \"/web\"\n  AND filterPattern='\"' + @requestId + '\"'\n  AND logStreamNames=(SELECT [\"eef27ec0b2de1151e06871fcd657168319e0975d357db5d00da9e4f9b39fe07a\"])"
+        }
       }],
       "javascriptAPIVersion": "3",
       "source": "src",
