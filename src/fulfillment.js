@@ -8,49 +8,49 @@
   //   instance: parameters.instance,
   //   requestId: parameters.requestId
   // });
-  // const log_events = [];
+  const log_events = [];
   
   // format a message for slack
-  // const message = [{
-  //   "type": "section",
-  //   "text": {
-  //     "type": "mrkdwn",
-  //     "text": `I searched \`${parameters.instance}\` for request \`${parameters.requestId}\` :`
-  //   }
-  // }];
-  // if (log_events.length === 0) {
-  //   message.push({
-  //     "type": "section",
-  //     "text": {
-  //       "type": "mrkdwn",
-  //       "text": "_No logs matched_  :cry:"
-  //     }
-  //   });
-  // }
-  // for (const log_event of log_events) {
-  //   const short_log_stream_name = log_event.logStreamName.substring(0, 7);
-  //   const log_message = log_event.message;
-  //   message.push({
-  //     "type": "section",
-  //     "text": {
-  //       "type": "mrkdwn",
-  //       "text": `_(${short_log_stream_name}...)_\n\`\`\`${log_message}\`\`\``
-  //     }
-  //   });
-  // }
+  const message = [{
+    "type": "section",
+    "text": {
+      "type": "mrkdwn",
+      "text": `I searched \`${parameters.instance}\` for request \`${parameters.requestId}\` :`
+    }
+  }];
+  if (log_events.length === 0) {
+    message.push({
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "_No logs matched_  :cry:"
+      }
+    });
+  }
+  for (const log_event of log_events) {
+    const short_log_stream_name = log_event.logStreamName.substring(0, 7);
+    const log_message = log_event.message;
+    message.push({
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": `_(${short_log_stream_name}...)_\n\`\`\`${log_message}\`\`\``
+      }
+    });
+  }
   
   // post message to slack
-  // return {
-  //   status_code: 200,
-  //   headers: { "Content-Type": "application/json" },
-  //   body: {
-  //     payload: {
-  //       slack: {
-  //         attachments: {
-  //           blocks: message
-  //         }
-  //       }
-  //     }
-  //   }
-  // };
+  return {
+    status_code: 200,
+    headers: { "Content-Type": "application/json" },
+    body: {
+      payload: {
+        slack: {
+          attachments: {
+            blocks: message
+          }
+        }
+      }
+    }
+  };
 }
