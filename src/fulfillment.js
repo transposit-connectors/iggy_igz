@@ -46,9 +46,9 @@
     body: {
       payload: {
         slack: {
-          attachments: {
+          attachments: [{
             blocks: message
-          }
+          }]
         }
       }
     }
