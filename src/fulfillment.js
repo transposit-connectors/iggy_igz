@@ -5,12 +5,10 @@
   
   // fetch logs from AWS
   const log_events = api.run("this.filter_log_events", {
-    instance: "stage",
+    instance: parameters.instance,
     requestId: parameters.requestId
   });
-  
-  console.log(log_events);
-  
+    
   // format a message for slack
   const message = [{
     "type": "section",
