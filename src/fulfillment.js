@@ -4,11 +4,10 @@
   const parameters = parsed_body.queryResult.parameters;
   
   // fetch logs from AWS
-  // const log_events = api.run("this.filter_log_events", {
-  //   instance: parameters.instance,
-  //   requestId: parameters.requestId
-  // });
-  const log_events = [];
+  const log_events = api.run("this.filter_log_events", {
+    instance: "stage" || parameters.instance,
+    requestId: parameters.requestId
+  });
   
   // format a message for slack
   const message = [{
