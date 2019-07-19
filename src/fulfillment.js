@@ -5,7 +5,7 @@
   
   // fetch logs from AWS
   const log_events = api.run("this.filter_log_events", {
-    instance: parameters.instance,
+    instance: "stage",
     requestId: parameters.requestId
   });
     
