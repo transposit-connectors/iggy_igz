@@ -1,5 +1,5 @@
 ({ http_event }) => {
-  const { parsed_body } = http_event;
+  const parsed_body = http_event.parsed_body;
   const intent = parsed_body.queryResult.intent.name;
   const parameters = parsed_body.queryResult.parameters;
   

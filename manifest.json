@@ -27,7 +27,7 @@
       }, {
         "id": "list_log_groups",
         "tql": {
-          "tql": "SELECT * FROM aws_cloudwatch_logs.list_log_groups\n  W"
+          "tql": "SELECT * FROM aws_cloudwatch_logs.list_log_groups"
         }
       }, {
         "id": "list_log_streams",
