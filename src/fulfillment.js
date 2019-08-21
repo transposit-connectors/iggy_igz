@@ -42,7 +42,7 @@
   setImmediate(() => {
     api.run("slack.post_chat_message", { $body: {
       channel: "DMBH8V5FA",
-      attachments: : [{
+      attachments: [{
         blocks: message
       }]
     }}); 
