@@ -54,6 +54,18 @@
           "tql": "SELECT * FROM aws_cloudwatch_logs.filter_log_events\n  WHERE logGroupName=\"/aws/ecs/\" + @instance + \"/web\"\n  AND filterPattern='\"' + @requestId + '\"'\n  AND logStreamNames = (\n    SELECT [logStreamName] FROM this.list_log_streams\n      WHERE instance = @instance\n  )\n\n-- SELECT * FROM aws_cloudwatch_logs.filter_log_events\n--   WHERE logGroupName=\"/aws/ecs/stage/web\"\n--   AND filterPattern='\"14d6797d-8fb6-4938-8e50-8a1f152d6183\"'\n--   AND logStreamNames=(SELECT [\"7dbee472c4e680a7955ee0f481b2dfc1f1474370a7e6530139ce45fb7daa74a1\"])"
         }
       }],
+      "dataConnections": [{
+        "ref": "slack.raw",
+        "overrides": {
+          "swagger": {
+            "oauthConfig": {
+              "scope": "chat:write:user"
+            },
+            "executionLimits": {
+            }
+          }
+        }
+      }],
       "javascriptAPIVersion": "3",
       "source": "src",
       "userSettingsDisplay": "GENERATED"
