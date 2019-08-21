@@ -38,18 +38,34 @@
     });
   }
   
-  // post message to slack
+  
+  setImmediate(() => {
+    api.run("slack.post_chat_message", { $body: {
+      channel: "DMBH8V5FA",
+      attachments: : [{
+        blocks: message
+      }]
+    }}); 
+  });
+  
   return {
     status_code: 200,
     headers: { "Content-Type": "application/json" },
-    body: {
-      payload: {
-        slack: {
-          attachments: [{
-            blocks: message
-          }]
-        }
-      }
-    }
+    body: {}
   };
+  
+  // // post message to slack
+  // return {
+  //   status_code: 200,
+  //   headers: { "Content-Type": "application/json" },
+  //   body: {
+  //     payload: {
+  //       slack: {
+  //         attachments: [{
+  //           blocks: message
+  //         }]
+  //       }
+  //     }
+  //   }
+  // };
 }
