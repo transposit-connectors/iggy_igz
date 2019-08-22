@@ -69,6 +69,8 @@
       "javascriptAPIVersion": "3",
       "source": "src",
       "userSettingsDisplay": "GENERATED"
-    }
+    },
+    "description": "Transposit's debugging Slack bot",
+    "displayName": "IggyIgz"
   }
 }
