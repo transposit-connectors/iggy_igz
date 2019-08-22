@@ -22,23 +22,6 @@
           "webhook": true
         }
       }, {
-        "id": "list_log_groups",
-        "tql": {
-          "tql": "SELECT * FROM aws_cloudwatch_logs.list_log_groups"
-        }
-      }, {
-        "id": "list_log_streams",
-        "tql": {
-          "parameters": [{
-            "name": "instance",
-            "default": {
-              "text": "stage"
-            },
-            "type": "STRING"
-          }],
-          "tql": "SELECT logStreamName FROM aws_cloudwatch_logs.list_log_streams\n  WHERE logGroupName=\"/aws/ecs/\" + @instance + \"/web\"\n  AND orderBy=\"LastEventTime\"\n  AND descending=TRUE\n  LIMIT 1"
-        }
-      }, {
         "id": "filter_log_events",
         "tql": {
           "parameters": [{
@@ -48,7 +31,24 @@
             "name": "instance",
             "type": "STRING"
           }],
-          "tql": "SELECT * FROM aws_cloudwatch_logs.filter_log_events\n  WHERE logGroupName=\"/aws/ecs/\" + @instance + \"/web\"\n  AND filterPattern='\"' + @requestId + '\"'\n  AND logStreamNames = (\n    SELECT [logStreamName] FROM this.list_log_streams\n      WHERE instance = @instance\n  )"
+          "tql": "SELECT * FROM aws_cloudwatch_logs.filter_log_events\n  WHERE $body.logGroupName=\"/aws/ecs/\" + @instance + \"/web\"\n  AND $body.filterPattern='\"' + @requestId + '\"'\n  AND $body.logStreamNames = (\n    SELECT [logStreamName] FROM this.describe_log_streams\n      WHERE instance = @instance\n  )"
+        }
+      }, {
+        "id": "describe_log_groups",
+        "tql": {
+          "tql": "SELECT * FROM aws_cloudwatch_logs.describe_log_groups"
+        }
+      }, {
+        "id": "describe_log_streams",
+        "tql": {
+          "parameters": [{
+            "name": "instance",
+            "default": {
+              "text": "stage"
+            },
+            "type": "STRING"
+          }],
+          "tql": "SELECT logStreamName FROM aws_cloudwatch_logs.describe_log_streams\n  WHERE $body.logGroupName=\"/aws/ecs/\" + @instance + \"/web\"\n  AND $body.orderBy=\"LastEventTime\"\n  AND $body.descending=TRUE\n  LIMIT 1"
         }
       }],
       "dataConnections": [{
