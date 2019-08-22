@@ -5,7 +5,7 @@
   
   // fetch logs from AWS
   const log_events = api.run("this.filter_log_events", {
-    instance: "stage",
+    instance: parameters.instance,
     requestId: parameters.requestId
   });
     
@@ -38,34 +38,18 @@
     });
   }
   
-  
-  setImmediate(() => {
-    api.run("slack.post_chat_message", { $body: {
-      channel: "DMBH8V5FA",
-      attachments: [{
-        blocks: message
-      }]
-    }}); 
-  });
-  
+  // post message to slack
   return {
     status_code: 200,
     headers: { "Content-Type": "application/json" },
-    body: {}
+    body: {
+      payload: {
+        slack: {
+          attachments: [{
+            blocks: message
+          }]
+        }
+      }
+    }
   };
-  
-  // // post message to slack
-  // return {
-  //   status_code: 200,
-  //   headers: { "Content-Type": "application/json" },
-  //   body: {
-  //     payload: {
-  //       slack: {
-  //         attachments: [{
-  //           blocks: message
-  //         }]
-  //       }
-  //     }
-  //   }
-  // };
 }
