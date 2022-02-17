@@ -46,10 +46,14 @@ To check that your bot is working, change `fulfillment` to simply echo its paylo
     body: {
       payload: {
         slack: {
-          text: `\`\`\`${JSON.stringify(http_event.parsed_body, null, 2)}\`\`\``
-        }
-      }
-    }
+          text: `\`\`\`${JSON.stringify(
+            http_event.parsed_body,
+            null,
+            2
+          )}\`\`\``,
+        },
+      },
+    },
   };
 };
 ```
@@ -69,15 +73,15 @@ In `fulfillment`, respond to Dialogflow with a HTTP 200 and an empty body. Call 
     api.run("slack.post_chat_message", {
       $body: {
         channel: slackRequest.event.channel,
-        text: "Hello, World!"
-      }
+        text: "Hello, World!",
+      },
     });
   });
 
   return {
     status_code: 200,
     headers: { "Content-Type": "application/json" },
-    body: {}
+    body: {},
   };
 };
 ```
