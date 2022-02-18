@@ -1,77 +1,92 @@
 {
   "v2": {
     "transposit": {
-      "dependencies": [{
-        "name": "transposit/aws_cloudwatch_logs:v3.*.*",
-        "alias": "aws_cloudwatch_logs"
-      }],
-      "operations": [{
-        "id": "fulfillment",
-        "function": {
-          "parameters": [{
-            "name": "http_event",
-            "default": {
-              "text": "{\"http_method\": \"GET\", \"query_parameters\": {}, \"headers\": {}, \"body\": \"\"}"
-            },
-            "type": "OBJECT"
-          }],
-          "js": "fulfillment.js"
+      "dependencies": [
+        {
+          "name": "transposit/aws_cloudwatch_logs:v3.*.*",
+          "alias": "aws_cloudwatch_logs"
+        }
+      ],
+      "operations": [
+        {
+          "id": "fulfillment",
+          "function": {
+            "parameters": [
+              {
+                "name": "http_event",
+                "default": {
+                  "text": "{\"http_method\": \"GET\", \"query_parameters\": {}, \"headers\": {}, \"body\": \"\"}"
+                },
+                "type": "OBJECT"
+              }
+            ],
+            "js": "fulfillment.js"
+          },
+          "access": {
+            "requireApiKey": true,
+            "webhook": true
+          }
         },
-        "access": {
-          "requireApiKey": true,
-          "webhook": true
+        {
+          "id": "filter_log_events",
+          "tql": {
+            "parameters": [
+              {
+                "name": "requestId",
+                "type": "STRING"
+              },
+              {
+                "name": "instance",
+                "type": "STRING"
+              }
+            ],
+            "tql": "SELECT * FROM aws_cloudwatch_logs.filter_log_events\n  WHERE $body.logGroupName=\"/aws/ecs/\" + @instance + \"/web\"\n  AND $body.filterPattern='\"' + @requestId + '\"'\n  AND $body.logStreamNames = (\n    SELECT [logStreamName] FROM this.describe_log_streams\n      WHERE instance = @instance\n  )"
+          }
+        },
+        {
+          "id": "describe_log_groups",
+          "tql": {
+            "tql": "SELECT * FROM aws_cloudwatch_logs.describe_log_groups"
+          }
+        },
+        {
+          "id": "describe_log_streams",
+          "tql": {
+            "parameters": [
+              {
+                "name": "instance",
+                "default": {
+                  "text": "stage"
+                },
+                "type": "STRING"
+              }
+            ],
+            "tql": "SELECT logStreamName FROM aws_cloudwatch_logs.describe_log_streams\n  WHERE $body.logGroupName=\"/aws/ecs/\" + @instance + \"/web\"\n  AND $body.orderBy=\"LastEventTime\"\n  AND $body.descending=TRUE\n  LIMIT 1"
+          }
         }
-      }, {
-        "id": "filter_log_events",
-        "tql": {
-          "parameters": [{
-            "name": "requestId",
-            "type": "STRING"
-          }, {
-            "name": "instance",
-            "type": "STRING"
-          }],
-          "tql": "SELECT * FROM aws_cloudwatch_logs.filter_log_events\n  WHERE $body.logGroupName=\"/aws/ecs/\" + @instance + \"/web\"\n  AND $body.filterPattern='\"' + @requestId + '\"'\n  AND $body.logStreamNames = (\n    SELECT [logStreamName] FROM this.describe_log_streams\n      WHERE instance = @instance\n  )"
-        }
-      }, {
-        "id": "describe_log_groups",
-        "tql": {
-          "tql": "SELECT * FROM aws_cloudwatch_logs.describe_log_groups"
-        }
-      }, {
-        "id": "describe_log_streams",
-        "tql": {
-          "parameters": [{
-            "name": "instance",
-            "default": {
-              "text": "stage"
-            },
-            "type": "STRING"
-          }],
-          "tql": "SELECT logStreamName FROM aws_cloudwatch_logs.describe_log_streams\n  WHERE $body.logGroupName=\"/aws/ecs/\" + @instance + \"/web\"\n  AND $body.orderBy=\"LastEventTime\"\n  AND $body.descending=TRUE\n  LIMIT 1"
-        }
-      }],
-      "dataConnections": [{
-        "ref": "slack.raw",
-        "overrides": {
-          "swagger": {
-            "oauthConfig": {
-              "scope": "chat:write:user"
-            },
-            "executionLimits": {
+      ],
+      "dataConnections": [
+        {
+          "ref": "slack.raw",
+          "overrides": {
+            "swagger": {
+              "oauthConfig": {
+                "scope": "chat:write:user"
+              },
+              "executionLimits": {}
+            }
+          }
+        },
+        {
+          "ref": "aws_cloudwatch_logs",
+          "overrides": {
+            "aws": {
+              "region": "us-west-2",
+              "executionLimits": {}
             }
           }
         }
-      }, {
-        "ref": "aws_cloudwatch_logs",
-        "overrides": {
-          "aws": {
-            "region": "us-west-2",
-            "executionLimits": {
-            }
-          }
-        }
-      }],
+      ],
       "javascriptAPIVersion": "3",
       "source": "src",
       "userSettingsDisplay": "GENERATED"
